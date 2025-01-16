@@ -52,11 +52,17 @@ namespace Infraestructure.Repositories
             return await _dbSet.Where(combinedFilter).ToListAsync();
         }
 
-        public async Task<TEntity> UpdateAsync(TEntity entity)
+        public async Task<TEntity?> UpdateAsync(TEntity entityUpdated)
         {
-            _dbSet.Update(entity);
+            var entity = await FindById(entityUpdated.Id);
+
+            if (entity == null)
+                return null;
+
+            _context.Entry(entity).CurrentValues.SetValues(entityUpdated);
+
             await _context.SaveChangesAsync();
-            return entity;
+            return entityUpdated;
         }
     }
 }
