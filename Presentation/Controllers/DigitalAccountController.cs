@@ -31,6 +31,17 @@ namespace Presentation.Controllers
             return Ok(response);
         }
 
+        [HttpPatch("{id}")]
+        public async Task<ActionResult> Update(Guid id, [FromBody] UpdateDigitalAccount updateDigitalAccountDto)
+        {
+            var response = await _service.Update(id, updateDigitalAccountDto);
+             
+            if (response == null)
+                return NotFound("Digital account not found");
+
+            return Ok(response);
+        }
+
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
