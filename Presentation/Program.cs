@@ -1,4 +1,9 @@
 
+using Application.Contracts.DigitalAccount.Services;
+using Infraestructure.Database.PostgreSQL;
+using Infraestructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 namespace Presentation
 {
     public class Program
@@ -8,6 +13,13 @@ namespace Presentation
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddDbContext<PostgreSQLDBContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+            );
+            builder.Services.AddScoped<DigitalAccountService>();
+            builder.Services.AddScoped<DigitalAccountRepository>();
+            builder.Services.AddScoped<PostgreSQLDBContext>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -25,8 +37,7 @@ namespace Presentation
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
-
+            //app.UseAuthorization();
 
             app.MapControllers();
 
